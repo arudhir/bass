@@ -177,7 +177,7 @@ class StartPage(tk.Frame):
         self.catch_boat_number.grid(row=4, column=0, sticky='w')
 
 
-        self.instruction = tk.Label(self, text='Enter space-separated fish weights', font=LARGE_FONT, bg='#39c4d3')
+        self.instruction = tk.Label(self, text='Enter space-separated fish weights in the form (lb,oz)', font=LARGE_FONT, bg='#39c4d3') # TODO: See if a wrap option works instead of newline
         self.instruction.grid(row=5, column=0, sticky='w')
         self.catch_fish_weight = ttk.Entry(self)
         self.catch_fish_weight.grid(row=6, column=0, sticky='w')
