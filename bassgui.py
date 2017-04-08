@@ -7,8 +7,6 @@ from tkinter.filedialog import askopenfilename
 
 LARGE_FONT = ("Avenir Next", 12)
 
-###################################################################################################
-
 class Entry:
     '''
     The object that is actually holding the data with the entries
