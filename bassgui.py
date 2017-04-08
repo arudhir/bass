@@ -31,10 +31,9 @@ class Entry:
     def updateFish(self, total_weight, num_fish, big_bass):
         ureg = pint.UnitRegistry()
         self.num_fish = num_fish
-
         self.total_weight = int(total_weight[0]) * ureg.pound + int(total_weight[1]) * ureg.ounce
 
-        if (big_bass[0] == ''): # Because split returned a list
+        if (big_bass[0] == ''): # big_bass[0] Because split returned a list
             self.biggest_fish = np.nan
         else:
             self.biggest_fish = int(big_bass[0]) * ureg.pound + int(big_bass[1]) * ureg.ounce
@@ -145,12 +144,13 @@ class StartPage(tk.Frame):
         #                                                               entry.biggest_fish))
 
 
-        ##################################################################################################
-        # ADD ENTRY
-        ##################################################################################################
+        self.addEntryInterface()
+        self.addCatchInterface()
+        self.deleteEntryInterface()
+        self.openFileInterface()
 
-
-        self.instruction = tk.Label(self, text='Enter Boat Number', font=LARGE_FONT, bg='#39c4d3') # for some reason, not working with ttk.Label(font=LARGE_FONT, bg='#39c4d3') so I need to use tk labels
+    def addEntryInterface(self):
+        self.instruction = tk.Label(self, text='Enter Boat Number', font=LARGE_FONT, bg='#39c4d3') # for ttk, use style parameter instead of font
         self.instruction.grid(row=3, column=1, sticky='sw') # Forcing it to be s because of weird formatting otherwise
         self.entry_boat_number = ttk.Entry(self)
         self.entry_boat_number.grid(row=4, column=1, sticky='w')
@@ -177,15 +177,11 @@ class StartPage(tk.Frame):
         self.add_entry_button = ttk.Button(self, text='Add Entry', command=self.addEntry, style='my.TButton')
         self.add_entry_button.grid(row=11, column=1, sticky='w')
 
-        ####################################################################################
-        # CATCH FISH
-        ####################################################################################
-
+    def addCatchInterface(self):
         self.instruction = tk.Label(self, text='Boat Number', font=LARGE_FONT, bg='#39c4d3')
         self.instruction.grid(row=3, column=0, sticky='w')
         self.catch_boat_number = ttk.Entry(self)
         self.catch_boat_number.grid(row=4, column=0, sticky='w')
-
 
         self.instruction = tk.Label(self, text='Enter total fish weight in the form (lb, oz). Example: (1, 9) is 1lb 9oz', font=LARGE_FONT, bg='#39c4d3') # TODO: See if a wrap option works instead of newline
         self.instruction.grid(row=5, column=0, sticky='w')
@@ -203,14 +199,10 @@ class StartPage(tk.Frame):
         self.catch_big_bass.grid(row=10, column=0, sticky='w')
         self.catch_big_bass.bind('<Return>', self.addCatch)
 
-
         self.add_catch_button = ttk.Button(self, text='Add Catches', command=self.addCatch, style='my.TButton')
         self.add_catch_button.grid(row=11, column=0, sticky='w')
 
-        ####################################################################################
-        # DELETE ENTRY
-        ####################################################################################
-
+    def deleteEntryInterface(self):
         self.instruction = tk.Label(self, text='Boat Number to Delete', font=LARGE_FONT, bg='#39c4d3')
         self.instruction.grid(row=12, column=0, pady=20, sticky='w')
         self.delete_entry = ttk.Entry(self)
@@ -219,21 +211,9 @@ class StartPage(tk.Frame):
         self.delete_entry_button.grid(row=14, column=0, sticky='w')
         self.delete_entry.bind('<Return>', self.deleteEntry)
 
-        ####################################################################################
-        # OPEN FILE
-        ####################################################################################
-
-
+    def openFileInterface(self):
         self.open_file_button = ttk.Button(self, text='Open File', command=self.addEntryFromExcel, style='my.TButton')
         self.open_file_button.grid(row=15, column=0, pady=20, sticky='sw')
-
-
-        # self.instruction = ttk.Label(self, text='Boat Number to Edit')
-        # self.instruction.grid(row=25, column=0)
-        # self.edit_entry = ttk.Entry(self)
-        # self.edit_entry.grid(row=26, column=0)
-        # self.edit_entry_button = ttk.Button(self, text='Edit Entry', command=self.editEntry)
-        # self.edit_entry_button.grid(row=27, column=0)
 
     def editEntry(self, event=None):
         boat_number = int(self.edit_entry.get())
@@ -283,7 +263,6 @@ class StartPage(tk.Frame):
 
 
     def updateEntry(self, toplevel, entry, event=None):
-
         entry.boat_number = int(toplevel.boat_number.get())
         entry.school =  toplevel.school.get()
         entry.fisher1 =  toplevel.fisher1.get()
@@ -292,22 +271,14 @@ class StartPage(tk.Frame):
         entry.total_weight =  toplevel.total_weight.get()
         entry.biggest_fish =  toplevel.biggest_fish.get()
 
+    def addEntry(self, event=None):
+        '''
+        Adds an entry.
 
-        # self.tree.delete(entry.boat_number)
-        # self.tree.insert('', entry.boat_number, iid=entry.boat_number, text=str(entry.boat_number), values=(entry.boat_number,
-        #                                                                                    entry.school,
-        #                                                                                    entry.names,
-        #                                                                                    entry.num_fish,
-        #                                                                                    entry.total_weight,
-        #                                                                                    entry.biggest_fish))
-        #
+        Note: self.e.bind('<Key>', self.meth) calls self.meth(event), meaning that it will pass both itself AND the event.
 
-
-        # del entry # potential memleak?
-
-
-    def addEntry(self, event=None): # Without event=None, if I hit 'Return', self.e.bind('<Key>', self.meth) calls self.meth(event) - meaning it passes in both itself AND the keyboard event, giving an error because we have too many parameters. By having event=None, we catch that.
-
+        Therefore, event=None catches that.
+        '''
         boat_number = int(self.entry_boat_number.get())
 
         # Display error message if someone tries to enter a key that already exists
@@ -319,21 +290,16 @@ class StartPage(tk.Frame):
             )
             return
 
-
         school =  self.entry_school.get()
         fisher1 =  self.entry_fisher1.get()
         fisher2 =  self.entry_fisher2.get()
 
         entry = Entry(boat_number=boat_number, school=school, names=[fisher1, fisher2])
-
         entries[boat_number] = entry
-
-        # self.text.insert(0.0, "School: {} \nFishers: {}, {} \n\n".format(entry.school, entry.names[0], entry.names[1])) # 0.0 is row0 col0
         self.entry_boat_number.delete(0, 'end') # clears entrybox once something is submitted
         self.entry_school.delete(0, 'end') # clears entrybox once something is submitted
         self.entry_fisher1.delete(0, 'end') # clears entrybox once something is submitted
         self.entry_fisher2.delete(0, 'end') # clears entrybox once something is submitted
-
 
         # Update the table
         self.tree.insert("", entry.boat_number, iid=entry.boat_number, text=str(entry.boat_number), values=(entry.boat_number,
@@ -343,9 +309,7 @@ class StartPage(tk.Frame):
                                                                                            entry.total_weight,
                                                                                            entry.biggest_fish))
 
-
     def addEntryFromExcel(self, event=None):
-        # TODO: ADD NAN CHECKS
         filename = askopenfilename()
         data = pd.read_excel(filename)
         boat_numbers = data['Boat No.']
@@ -362,8 +326,6 @@ class StartPage(tk.Frame):
                                                                                                                 entry.total_weight,
                                                                                                                 entry.biggest_fish))
 
-
-
     def treeviewSortColumn(self, col, reverse):
         l = [(self.tree.set(k, col), k) for k in self.tree.get_children('')]
         try:
@@ -376,7 +338,6 @@ class StartPage(tk.Frame):
 
         self.tree.heading(col, command=lambda: self.treeviewSortColumn(col, not reverse))
 
-
     def addCatch(self, event=None):
         try:
             boat_number = int(self.catch_boat_number.get()) # They are type string otherwise
@@ -385,8 +346,6 @@ class StartPage(tk.Frame):
             return
 
         try:
-            # fish_weights = self.catch_fish_weight.get().split(' ')
-            # fish_weights = [w.split(',') for w in fish_weights]
             total_weight = self.catch_fish_weight.get().split(', ')
             big_bass = self.catch_big_bass.get().split(', ')
         except ValueError:
@@ -405,8 +364,6 @@ class StartPage(tk.Frame):
             self.displayInvalidIntEntry()
             return
 
-
-
         entry.updateFish(total_weight, num_fish, big_bass)
 
         # delete entry from textbox
@@ -414,7 +371,6 @@ class StartPage(tk.Frame):
         self.catch_fish_weight.delete(0, 'end')
         self.catch_num_fish.delete(0, 'end')
         self.catch_big_bass.delete(0, 'end')
-
 
         self.tree.delete(entry.boat_number)
         self.tree.insert('', entry.boat_number, iid=entry.boat_number, text=str(entry.boat_number), values=(entry.boat_number,
@@ -437,7 +393,6 @@ class StartPage(tk.Frame):
         entries.pop(boat_number)
         del entry
 
-
     def displayBoatDoesNotExistError(self):
         '''
         Shows messagebox saying boat does not exist.
@@ -453,7 +408,6 @@ class StartPage(tk.Frame):
             'Please enter an integer value'
         )
 
-
-
-app = BassApp()
-app.mainloop()
+if __name__ == '__main__':
+    app = BassApp()
+    app.mainloop()
