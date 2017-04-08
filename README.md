@@ -7,3 +7,9 @@
 1) Sort by value by clicking the column header
 2) Entering incorrect values triggers a popup window with instructions on correct input
 3) Trying to overwrite a preexisting/access a nonexisting boat will also trigger an error popup window
+
+# Required packages
+1) tkinter
+2) pandas
+3) numpy
+4) pint
