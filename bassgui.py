@@ -107,7 +107,7 @@ class StartPage(tk.Frame):
         self.tree = ttk.Treeview(self, show='headings') # we can't one-line with .grid() bc then self.tree = None (grid returns None)
         self.tree.grid(row=1, column=0)
 
-        col_names = ["Boat Number", 'School', "Fishers", "Number of Fish", "Total Weight", "Biggest Fish"]
+        col_names = ["Boat Number", 'School', "Anglers", "Number of Fish", "Total Weight", "Big Bass"]
 
         self.tree["columns"]=(col_names)
 
