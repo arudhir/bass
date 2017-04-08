@@ -33,8 +33,8 @@ class Entry:
         self.num_fish = num_fish
 
         self.total_weight = int(total_weight[0]) * ureg.pound + int(total_weight[1]) * ureg.ounce
-        print(big_bass)
-        if (big_bass[0] == ''):
+
+        if (big_bass[0] == ''): # Because split returned a list
             self.biggest_fish = np.nan
         else:
             self.biggest_fish = int(big_bass[0]) * ureg.pound + int(big_bass[1]) * ureg.ounce
@@ -217,6 +217,7 @@ class StartPage(tk.Frame):
         self.delete_entry.grid(row=13, column=0, sticky='w')
         self.delete_entry_button = ttk.Button(self, text='Delete Entry', command=self.deleteEntry, style='my.TButton')
         self.delete_entry_button.grid(row=14, column=0, sticky='w')
+        self.delete_entry.bind('<Return>', self.deleteEntry)
 
         ####################################################################################
         # OPEN FILE
@@ -366,9 +367,9 @@ class StartPage(tk.Frame):
     def treeviewSortColumn(self, col, reverse):
         l = [(self.tree.set(k, col), k) for k in self.tree.get_children('')]
         try:
-            l.sort(key=lambda t: int(t[0]), reverse=reverse) # we need to convert the treeview object into an int
+            l.sort(key=lambda t: int(t[0]), reverse=not reverse) # we need to convert the treeview object into an int
         except ValueError:
-            l.sort(reverse=not reverse) # This will sort the strings. Oddly, nothing at all happens for string columns w/o this block—no error is shown. Maybe ttk internally ignores it.
+            l.sort(reverse=reverse) # This will sort the strings. Oddly, nothing at all happens for string columns w/o this block—no error is shown. Maybe ttk internally ignores it.
 
         for index, (val, k) in enumerate(l):
             self.tree.move(k, '', index)
@@ -431,6 +432,7 @@ class StartPage(tk.Frame):
             self.displayBoatDoesNotExistError()
             return
 
+        self.delete_entry.delete(0, 'end')
         self.tree.delete(entry.boat_number)
         entries.pop(boat_number)
         del entry
