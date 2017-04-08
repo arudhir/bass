@@ -139,12 +139,10 @@ class StartPage(tk.Frame):
         self.entry_boat_number = ttk.Entry(self)
         self.entry_boat_number.grid(row=4, column=1, sticky='w')
 
-
         self.instruction = tk.Label(self, text='Enter School', font=LARGE_FONT, bg='#39c4d3')
         self.instruction.grid(row=5, column=1, sticky='w')
         self.entry_school = ttk.Entry(self)
         self.entry_school.grid(row=6, column=1, sticky='w')
-
 
         self.instruction = tk.Label(self, text='Enter Angler 1', font=LARGE_FONT, bg='#39c4d3')
         self.instruction.grid(row=7, column=1, sticky='w')
@@ -156,7 +154,6 @@ class StartPage(tk.Frame):
         self.entry_fisher2 = ttk.Entry(self)
         self.entry_fisher2.grid(row=10, column=1, sticky='w')
         self.entry_fisher2.bind('<Return>', self.addEntry) # you need to catch the keyboard event as a parameter, see below
-
 
         self.add_entry_button = ttk.Button(self, text='Add Entry', command=self.addEntry, style='my.TButton')
         self.add_entry_button.grid(row=11, column=1, sticky='w')
@@ -202,7 +199,6 @@ class StartPage(tk.Frame):
     def editEntry(self, event=None):
         boat_number = int(self.edit_entry.get())
         entry = entries[boat_number]
-
         toplevel = tk.Toplevel()
 
         toplevel.boat_number = ttk.Entry(toplevel)
@@ -220,7 +216,6 @@ class StartPage(tk.Frame):
         toplevel.fisher2 = ttk.Entry(toplevel)
         toplevel.fisher2.insert('end', entry.names[1])
         toplevel.fisher2.grid(row=4, column=0)
-
 
         toplevel.num_fish = ttk.Entry(toplevel)
         toplevel.num_fish.insert('end', entry.num_fish)
@@ -244,7 +239,6 @@ class StartPage(tk.Frame):
                                                                                                    entry.num_fish,
                                                                                                    entry.total_weight,
                                                                                                    entry.biggest_fish))
-
 
     def updateEntry(self, toplevel, entry, event=None):
         entry.boat_number = int(toplevel.boat_number.get())
