@@ -6,6 +6,8 @@ from tkinter import ttk, filedialog, messagebox, font # like the CSS for tkinter
 from tkinter.filedialog import askopenfilename
 
 LARGE_FONT = ("Avenir Next", 12)
+entries = {} # global variable because I'm a pleb
+
 
 class Entry:
     '''
@@ -51,23 +53,6 @@ class Entry:
         # self.updateTotalWeight()
 
 
-entries = {} # global variable because I'm a pleb
-# entries = {
-#             1: Entry(1, 'Illinois', ('Robert', 'Bobbert'), fishes=[10, 20, 30, 40, 50]),
-#             2: Entry(2, 'Fisher\'s Guild', ('xxFish3rxx', 'SH4RK_B455'), fishes=[100, 200, 0, 0, 0]),
-#             3: Entry(3, 'Illinois', ('Roberto', 'Boberto'), fishes=[1, 2, 0, 4, 5]),
-#             4: Entry(4, 'Michigan', ('Rob', 'Bob'), fishes=[19, 0, 39, 0, 59]),
-#             5: Entry(5, 'Harvard', ('R', 'B'), fishes=[0, 0, 0, 0, 511]),
-#
-#             }
-
-# entries_by_school = {
-#     'Illinois': [Entry(3, 'Illinois', ('Roberto', 'Boberto'), 90, 4, 45), Entry(1, 'Illinois', ('Robert', 'Bobbert'), 100, 5, 80)],
-#     'Fisher\'s Guild': [Entry(2, 'Michigan', ('xxFish3rxx', 'SH4RK_B455'), 1000, 1, 1000)]
-#     }
-
-
-###################################################################################################
 class BassApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -92,6 +77,7 @@ class BassApp(tk.Tk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+
 
 class StartPage(tk.Frame):
     '''
