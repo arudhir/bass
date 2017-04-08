@@ -141,31 +141,31 @@ class StartPage(tk.Frame):
 
 
         self.instruction = tk.Label(self, text='Enter Boat Number', font=LARGE_FONT, bg='#39c4d3') # for some reason, not working with ttk.Label(font=LARGE_FONT, bg='#39c4d3') so I need to use tk labels
-        self.instruction.grid(row=3, column=2, sticky='sw') # Forcing it to be s because of weird formatting otherwise
+        self.instruction.grid(row=3, column=1, sticky='sw') # Forcing it to be s because of weird formatting otherwise
         self.entry_boat_number = ttk.Entry(self)
-        self.entry_boat_number.grid(row=4, column=2, sticky='w')
+        self.entry_boat_number.grid(row=4, column=1, sticky='w')
 
 
         self.instruction = tk.Label(self, text='Enter School', font=LARGE_FONT, bg='#39c4d3')
-        self.instruction.grid(row=5, column=2, sticky='w')
+        self.instruction.grid(row=5, column=1, sticky='w')
         self.entry_school = ttk.Entry(self)
-        self.entry_school.grid(row=6, column=2, sticky='w')
+        self.entry_school.grid(row=6, column=1, sticky='w')
 
 
         self.instruction = tk.Label(self, text='Enter Fisher 1', font=LARGE_FONT, bg='#39c4d3')
-        self.instruction.grid(row=7, column=2, sticky='w')
+        self.instruction.grid(row=7, column=1, sticky='w')
         self.entry_fisher1 = ttk.Entry(self)
-        self.entry_fisher1.grid(row=8, column=2, sticky='w')
+        self.entry_fisher1.grid(row=8, column=1, sticky='w')
 
         self.instruction = tk.Label(self, text='Enter Fisher 2', font=LARGE_FONT, bg='#39c4d3')
-        self.instruction.grid(row=9, column=2, sticky='w')
+        self.instruction.grid(row=9, column=1, sticky='w')
         self.entry_fisher2 = ttk.Entry(self)
-        self.entry_fisher2.grid(row=10, column=2, sticky='w')
+        self.entry_fisher2.grid(row=10, column=1, sticky='w')
         self.entry_fisher2.bind('<Return>', self.addEntry) # you need to catch the keyboard event as a parameter, see below
 
 
         self.add_entry_button = ttk.Button(self, text='Add Entry', command=self.addEntry, style='my.TButton')
-        self.add_entry_button.grid(row=11, column=2, sticky='w')
+        self.add_entry_button.grid(row=11, column=1, sticky='w')
 
         ####################################################################################
         # CATCH FISH
