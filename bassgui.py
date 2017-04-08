@@ -424,65 +424,6 @@ class StartPage(tk.Frame):
             'Please enter an integer value'
         )
 
-class PageAddEntries(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-
-        label = tk.Label(self, text='Entries Page', font=LARGE_FONT)
-        label.pack(padx=10, pady=10)
-
-        button1 = ttk.Button(self, text='Back to Home',
-                             command=lambda: controller.show_frame(StartPage))
-        button1.pack()
-
-        self.instruction = ttk.Label(self, text='Enter Boat Number')
-        self.instruction.pack(padx=10, pady=10)
-        self.entry_boat_number = ttk.Entry(self)
-        self.entry_boat_number.pack()
-
-
-        self.instruction = ttk.Label(self, text='Enter School')
-        self.instruction.pack(padx=10, pady=10)
-        self.entry_school = ttk.Entry(self)
-        self.entry_school.pack()
-
-
-        self.instruction = ttk.Label(self, text='Enter Fisher 1')
-        self.instruction.pack(padx=10, pady=10)
-        self.entry_fisher1 = ttk.Entry(self)
-        self.entry_fisher1.pack()
-
-        self.instruction = ttk.Label(self, text='Enter Fisher 2')
-        self.instruction.pack(padx=10, pady=10)
-        self.entry_fisher2 = ttk.Entry(self)
-        self.entry_fisher2.pack()
-        self.entry_fisher2.bind('<Return>', self.addEntry) # you need to catch the keyboard event as a parameter, see below
-
-
-        self.submit_button = ttk.Button(self, text='Add Entry', command=self.addEntry)
-        self.submit_button.pack()
-
-        self.text = tk.Text(self, width=35, height=5, wrap='word')
-        self.text.pack()
-
-    def addEntry(self, event=None): # Without event=None, if I hit 'Return', self.e.bind('<Key>', self.meth) calls self.meth(event) - meaning it passes in both itself AND the keyboard event, giving an error because we have too many parameters. By having event=None, we catch that.
-        boat_number = int(self.entry_boat_number.get())
-        school =  self.entry_school.get()
-        fisher1 =  self.entry_fisher1.get()
-        fisher2 =  self.entry_fisher2.get()
-
-        entry = Entry(boat_number=boat_number, school=school, names=[fisher1, fisher2])
-
-        entries[boat_number] = entry # TODO: I THINK I NEED TO MANUALLY UPDATE THE TABLE. OR MAYBE JUST HAVE EVERYTHING ON ONE PAGE
-
-        self.text.insert(0.0, "School: {} \nFishers: {}, {} \n\n".format(entry.school, entry.names[0], entry.names[1])) # 0.0 is row0 col0
-        self.entry_boat_number.delete(0, 'end') # clears entrybox once something is submitted
-        self.entry_school.delete(0, 'end') # clears entrybox once something is submitted
-        self.entry_fisher1.delete(0, 'end') # clears entrybox once something is submitted
-        self.entry_fisher2.delete(0, 'end') # clears entrybox once something is submitted
-
-        # print(entries[1].school)
-
 
 
 app = BassApp()
