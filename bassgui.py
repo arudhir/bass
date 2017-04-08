@@ -162,12 +162,12 @@ class StartPage(tk.Frame):
         self.entry_school.grid(row=6, column=1, sticky='w')
 
 
-        self.instruction = tk.Label(self, text='Enter Fisher 1', font=LARGE_FONT, bg='#39c4d3')
+        self.instruction = tk.Label(self, text='Enter Angler 1', font=LARGE_FONT, bg='#39c4d3')
         self.instruction.grid(row=7, column=1, sticky='w')
         self.entry_fisher1 = ttk.Entry(self)
         self.entry_fisher1.grid(row=8, column=1, sticky='w')
 
-        self.instruction = tk.Label(self, text='Enter Fisher 2', font=LARGE_FONT, bg='#39c4d3')
+        self.instruction = tk.Label(self, text='Enter Angler 2', font=LARGE_FONT, bg='#39c4d3')
         self.instruction.grid(row=9, column=1, sticky='w')
         self.entry_fisher2 = ttk.Entry(self)
         self.entry_fisher2.grid(row=10, column=1, sticky='w')
