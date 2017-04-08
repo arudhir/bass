@@ -17,10 +17,10 @@ class Entry:
         self.boat_number = boat_number
         self.school = school
         self.names = names
-        self.fishes = np.array(fishes) # Five 'weights'
-        self.total_weight = sum(fishes)
-        self.num_fish = np.count_nonzero(self.fishes)
-        self.biggest_fish = max(self.fishes)
+        self.fishes = 0#np.array(fishes) # Five 'weights'
+        self.total_weight = 0 #sum(fishes)
+        self.num_fish = 0# np.count_nonzero(self.fishes)
+        self.biggest_fish = 0 #max(self.fishes)
 
     def updateTotalWeight(self):
         self.total_weight = sum(self.fishes)
@@ -28,20 +28,30 @@ class Entry:
     def updateNumFish(self):
         self.num_fish = len(self.fishes)
 
-    def updateFish(self, fish_weights):
+    def updateFish(self, total_weight, num_fish, big_bass):
         ureg = pint.UnitRegistry()
-        weight_list = []
+        self.num_fish = num_fish
 
-        for w in fish_weights:
-            int_w = list(map(lambda x: int(x), w))
-            weight = int_w[0] * ureg.pound + int_w[1] * ureg.ounce
-            weight_list.append(weight)
+        self.total_weight = int(total_weight[0]) * ureg.pound + int(total_weight[1]) * ureg.ounce
+        print(big_bass)
+        if (big_bass[0] == ''):
+            self.biggest_fish = np.nan
+        else:
+            self.biggest_fish = int(big_bass[0]) * ureg.pound + int(big_bass[1]) * ureg.ounce
 
-        sorted_weights = sorted(weight_list, reverse=True)[:5] # Get top 5 fish weights, works even if len < 5
-        self.fishes = sorted_weights
-        self.biggest_fish = max(self.fishes)
-        self.updateNumFish()
-        self.updateTotalWeight()
+        # ureg = pint.UnitRegistry()
+        # weight_list = []
+        #
+        # for w in fish_weights:
+        #     int_w = list(map(lambda x: int(x), w))
+        #     weight = int_w[0] * ureg.pound + int_w[1] * ureg.ounce
+        #     weight_list.append(weight)
+        #
+        # sorted_weights = sorted(weight_list, reverse=True)[:5] # Get top 5 fish weights, works even if len < 5
+        # self.fishes = sorted_weights
+        # self.biggest_fish = max(self.fishes)
+        # self.updateNumFish()
+        # self.updateTotalWeight()
 
 
 entries = {} # global variable because I'm a pleb
@@ -177,25 +187,36 @@ class StartPage(tk.Frame):
         self.catch_boat_number.grid(row=4, column=0, sticky='w')
 
 
-        self.instruction = tk.Label(self, text='Enter space-separated fish weights in the form (lb,oz)', font=LARGE_FONT, bg='#39c4d3') # TODO: See if a wrap option works instead of newline
+        self.instruction = tk.Label(self, text='Enter total fish weight in the form (lb, oz). Example: (1, 9) is 1lb 9oz', font=LARGE_FONT, bg='#39c4d3') # TODO: See if a wrap option works instead of newline
         self.instruction.grid(row=5, column=0, sticky='w')
         self.catch_fish_weight = ttk.Entry(self)
         self.catch_fish_weight.grid(row=6, column=0, sticky='w')
-        self.catch_fish_weight.bind('<Return>', self.addCatch)
+
+        self.instruction = tk.Label(self, text='Enter number of fish caught', font=LARGE_FONT, bg='#39c4d3')
+        self.instruction.grid(row=7, column=0, sticky='w')
+        self.catch_num_fish = ttk.Entry(self)
+        self.catch_num_fish.grid(row=8, column=0, sticky='w')
+
+        self.instruction = tk.Label(self, text='Enter big bass (if applicable)', font=LARGE_FONT, bg='#39c4d3')
+        self.instruction.grid(row=9, column=0, sticky='w')
+        self.catch_big_bass = ttk.Entry(self)
+        self.catch_big_bass.grid(row=10, column=0, sticky='w')
+        self.catch_big_bass.bind('<Return>', self.addCatch)
+
 
         self.add_catch_button = ttk.Button(self, text='Add Catches', command=self.addCatch, style='my.TButton')
-        self.add_catch_button.grid(row=7, column=0, sticky='w')
+        self.add_catch_button.grid(row=11, column=0, sticky='w')
 
         ####################################################################################
         # DELETE ENTRY
         ####################################################################################
 
         self.instruction = tk.Label(self, text='Boat Number to Delete', font=LARGE_FONT, bg='#39c4d3')
-        self.instruction.grid(row=8, column=0, pady=20, sticky='w')
+        self.instruction.grid(row=12, column=0, pady=20, sticky='w')
         self.delete_entry = ttk.Entry(self)
-        self.delete_entry.grid(row=9, column=0, sticky='w')
+        self.delete_entry.grid(row=13, column=0, sticky='w')
         self.delete_entry_button = ttk.Button(self, text='Delete Entry', command=self.deleteEntry, style='my.TButton')
-        self.delete_entry_button.grid(row=10, column=0, sticky='w')
+        self.delete_entry_button.grid(row=14, column=0, sticky='w')
 
         ####################################################################################
         # OPEN FILE
@@ -203,7 +224,7 @@ class StartPage(tk.Frame):
 
 
         self.open_file_button = ttk.Button(self, text='Open File', command=self.addEntryFromExcel, style='my.TButton')
-        self.open_file_button.grid(row=11, column=0, pady=20, sticky='sw')
+        self.open_file_button.grid(row=15, column=0, pady=20, sticky='sw')
 
 
         # self.instruction = ttk.Label(self, text='Boat Number to Edit')
@@ -363,15 +384,13 @@ class StartPage(tk.Frame):
             return
 
         try:
-            fish_weights = self.catch_fish_weight.get().split(' ')
-            fish_weights = [w.split(',') for w in fish_weights]
-
+            # fish_weights = self.catch_fish_weight.get().split(' ')
+            # fish_weights = [w.split(',') for w in fish_weights]
+            total_weight = self.catch_fish_weight.get().split(', ')
+            big_bass = self.catch_big_bass.get().split(', ')
         except ValueError:
             self.displayInvalidIntEntry()
             return
-
-
-
 
         try:
             entry = entries[boat_number]
@@ -379,13 +398,21 @@ class StartPage(tk.Frame):
             self.displayBoatDoesNotExistError()
             return
 
+        try:
+            num_fish = int(self.catch_num_fish.get())
+        except ValueError:
+            self.displayInvalidIntEntry()
+            return
 
 
-        entry.updateFish(fish_weights)
+
+        entry.updateFish(total_weight, num_fish, big_bass)
 
         # delete entry from textbox
         self.catch_boat_number.delete(0, 'end')
         self.catch_fish_weight.delete(0, 'end')
+        self.catch_num_fish.delete(0, 'end')
+        self.catch_big_bass.delete(0, 'end')
 
 
         self.tree.delete(entry.boat_number)
