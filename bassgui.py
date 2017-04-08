@@ -38,7 +38,6 @@ class Entry:
             weight_list.append(weight)
 
         sorted_weights = sorted(weight_list, reverse=True)[:5] # Get top 5 fish weights, works even if len < 5
-        print(sorted_weights)
         self.fishes = sorted_weights
         self.biggest_fish = max(self.fishes)
         self.updateNumFish()
