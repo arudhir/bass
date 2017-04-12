@@ -31,6 +31,14 @@ class Entry:
         self.num_fish = len(self.fishes)
 
     def updateFish(self, total_weight, num_fish, big_bass):
+        '''
+        Args :
+            total_weight: list of 2 strings, each of which is an integer value representing lb and oz values
+            num_fish: number of fish caught
+            big_bass: if a big bass value was entered, otherwise it will set it to np.nan
+
+        Calculates the total weight and updates Entry.
+        '''
         ureg = pint.UnitRegistry()
         self.num_fish = num_fish
         self.total_weight = (int(total_weight[0]) * ureg.pound
@@ -210,6 +218,11 @@ class StartPage(tk.Frame):
         self.open_file_button.grid(row=15, column=0, pady=20, sticky='sw')
 
     def editEntry(self, event=None):
+        '''
+        Not functional yet.
+
+        TODO: Figure out why entries isn't getting updated
+        '''
         boat_number = int(self.edit_entry.get())
         entry = entries[boat_number]
         toplevel = tk.Toplevel()
@@ -297,6 +310,12 @@ class StartPage(tk.Frame):
                          values=self.getValues(entry))
 
     def addEntryFromExcel(self, event=None):
+        '''
+        Adds entries straight from an excel file given that the column names are as follows:
+            Boat No.
+            School Name
+            Angler Names
+        '''
         filename = askopenfilename()
         data = pd.read_excel(filename)
         boat_numbers = data['Boat No.']
@@ -311,6 +330,9 @@ class StartPage(tk.Frame):
                              values=self.getValues(entry))
 
     def treeviewSortColumn(self, col, reverse):
+        '''
+        This is the common way to have a click event sort columns.
+        '''
         l = [(self.tree.set(k, col), k) for k in self.tree.get_children('')]
         try:
             # we need to convert the treeview object into an int
@@ -327,6 +349,9 @@ class StartPage(tk.Frame):
         self.tree.heading(col, command=lambda: self.treeviewSortColumn(col, not reverse))
 
     def addCatch(self, event=None):
+        '''
+        Update the entry with the day's catch
+        '''
         try:
             boat_number = int(self.catch_boat_number.get())
         except ValueError:
@@ -380,6 +405,9 @@ class StartPage(tk.Frame):
         del entry
 
     def getValues(self, entry):
+        '''
+        Convenience because we end up using these values a lot
+        '''
         return (entry.boat_number, entry.school, entry.names, entry.num_fish,
                 entry.total_weight, entry.biggest_fish)
 
