@@ -7,8 +7,6 @@ from tkinter.filedialog import askopenfilename
 from encap import *
 
 __all__ = ['Entry', 'StartPage', 'BassApp']
-LARGE_FONT = ("Avenir Next", 12)
-entries = {}  # global variable because I'm a pleb
 
 
 class Entry:
