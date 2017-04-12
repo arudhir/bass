@@ -92,7 +92,7 @@ class StartPage(tk.Frame):
         # default_font = font.nametofont("TkDefaultFont")
         # default_font.configure(size=48)
 
-        avenir12 = font.Font(family='Avenir Next', size=12, weight='bold')
+        avenir12 = font.Font(family='Avenir Next', size=12, weight='bold') 
         s = ttk.Style() # You have to do this if you want to change around font stuff with ttk buttons
         s.configure('my.TButton', font=('Avenir Next', 12))
 
